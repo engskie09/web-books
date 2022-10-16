@@ -18,9 +18,9 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        $author = Author::all();
+        $authors = Author::all();
 
-        return response($author, Response::HTTP_OK);
+        return response($authors, Response::HTTP_OK);
     }
 
     /**
@@ -63,7 +63,6 @@ class AuthorController extends Controller
      */
     public function show(String $id)
     {
-        //
         $author = Author::where('id', $id)->first();
 
         return response($author, Response::HTTP_OK);

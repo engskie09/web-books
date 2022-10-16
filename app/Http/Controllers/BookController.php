@@ -17,7 +17,9 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        $books = Book::all();
+
+        return response($books, Response::HTTP_OK);
     }
 
     /**
@@ -39,11 +41,13 @@ class BookController extends Controller
     public function store(Request $request)
     {
         $validated = Validator::make($request->all(), [
-            'agencyName' => 'required'
+            'title' => 'required',
+            'content' => 'required',
+            'author_id' => 'required'
         ]);
 
         if (!$validated->fails()) {
-            $book = Book::create($request->all());
+            Book::create($request->all());
 
             return response()->noContent(Response::HTTP_CREATED);
         }
@@ -59,7 +63,9 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        //
+        $book = Book::where('id', $id)->first();
+
+        return response($book, Response::HTTP_OK);
     }
 
     /**
@@ -82,7 +88,18 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validated = Validator::make($request->all(), [
+            'title' => 'required',
+            'content' => 'required',
+            'author_id' => 'required'
+        ]);
+
+        if (!$validated->fails()) {
+            Book::whereId($id)->update($request->all());
+            return response()->noContent(Response::HTTP_CREATED);
+        }
+
+        return response()->noContent(Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -93,6 +110,6 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Book::findOrFail($id)->delete();
     }
 }
