@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
+
+use App\Models\Book;
 
 class BookController extends Controller
 {
@@ -34,7 +38,17 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = Validator::make($request->all(), [
+            'agencyName' => 'required'
+        ]);
+
+        if (!$validated->fails()) {
+            $book = Book::create($request->all());
+
+            return response()->noContent(Response::HTTP_CREATED);
+        }
+
+        return response()->noContent(Response::HTTP_BAD_REQUEST);
     }
 
     /**
